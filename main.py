@@ -14,6 +14,7 @@ from polymarket import fetch_price_history_full
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import os
+import json
 
 # # def initialize(): #load CSVs/files, loads config to prep the environment
 # #     print("initialize the program")
@@ -120,10 +121,13 @@ def main():
     print(merged.columns)
 
     #Load Website Inputs and run the backtest
-    pos_sd = float(input("Positive threshold (× SD): "))
-    neg_sd = float(input("Negative threshold (× SD): "))
-    hold_days = int(input("Holding period (days): "))
-    position_size = float(input("Position size ($): "))
+    with open("config.json") as f:
+        cfg = json.load(f)
+    pos_sd        = cfg["pos_sd"]
+    neg_sd        = cfg["neg_sd"]
+    hold_days     = cfg["hold_days"]
+    position_size = cfg["position_size"]
+    start_cash    = cfg.get("start_cash", 500.0)
 
 
     portfolio = run_backtest(
@@ -140,6 +144,17 @@ def main():
     portfolio_path = os.path.join("docs/data", "portfolio.csv")
     portfolio.to_csv(portfolio_path)
     print(f"Wrote portfolio CSV to {portfolio_path}")
+
+    eqfig = px.line(
+        portfolio.reset_index(),
+        x="date",
+        y="value",
+        title="Portfolio Value Over Time",
+    )
+    eq_out = os.path.join("docs/images", "portfolio.png")
+    eqfig.write_image(eq_out, engine="kaleido")
+    print(f"Wrote equity curve to {eq_out}")
+
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
