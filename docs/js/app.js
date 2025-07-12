@@ -19,4 +19,4 @@ document.addEventListener("DOMContentLoaded", () => {
     // For now just confirm:
     alert("Parameters saved: " + JSON.stringify(params));
   });
-});
+}); 

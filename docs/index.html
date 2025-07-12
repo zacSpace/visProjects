@@ -1,15 +1,37 @@
+<!-- docs/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>My Data Viz</title>
+  <title>My Static Site</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <h1>ZooTopia Google Trends v. Polymarket Highest Grossing Movie 2025 Odds</h1>
+  <h1>My Prediction-Market Backtest</h1>
 
-  <!-- This is where your Python-generated chart appears -->
-  <img src="images/chart.png" alt="Category Values Chart">
+  <!-- New: Backtest parameter form -->
+  <form id="backtest-form">
+    <div>
+      <label for="posSd">Positive SD threshold:</label>
+      <input type="number" id="posSd" step="0.1" value="1">
+    </div>
+    <div>
+      <label for="negSd">Negative SD threshold:</label>
+      <input type="number" id="negSd" step="0.1" value="1">
+    </div>
+    <div>
+      <label for="holdDays">Holding period (days):</label>
+      <input type="number" id="holdDays" min="1" value="3">
+    </div>
+    <div>
+      <label for="positionSize">Position size ($):</label>
+      <input type="number" id="positionSize" step="0.01" value="10">
+    </div>
+    <button type="submit">Run Backtest</button>
+  </form>
+
+  <!-- Your existing chart container -->
+  <div id="chart"></div>
 
   <script src="js/app.js"></script>
 </body>
