@@ -1,0 +1,8 @@
+{
+    "pos_sd":        1.0,
+    "neg_sd":        1.0,
+    "hold_days":     3,
+    "position_size": 10.0,
+    "start_cash":    500.0
+  }
+  

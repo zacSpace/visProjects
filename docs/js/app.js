@@ -1,58 +1,77 @@
 // docs/js/app.js
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("backtest-form");
+  // 0) Grab the existing config (injected at build time)
+  const {
+    posSd: initPosSd,
+    negSd: initNegSd,
+    holdDays: initHoldDays,
+    positionSize: initSize,
+    token: githubToken
+  } = window.BACKTEST_CFG;
 
+  // 1) Prefill the form fields
+  document.getElementById("posSd").value        = initPosSd;
+  document.getElementById("negSd").value        = initNegSd;
+  document.getElementById("holdDays").value     = initHoldDays;
+  document.getElementById("positionSize").value = initSize;
+
+  const form = document.getElementById("backtest-form");
   form.addEventListener("submit", async e => {
     e.preventDefault();
 
-    // 1) Read the inputs
+    // 2) Collect the *new* parameters from the form
     const params = {
       posSd:        parseFloat(document.getElementById("posSd").value),
       negSd:        parseFloat(document.getElementById("negSd").value),
-      holdDays:     parseInt  (document.getElementById("holdDays").value, 10),
-      positionSize: parseFloat(document.getElementById("positionSize").value)
+      holdDays:     parseInt(  document.getElementById("holdDays").value, 10),
+      positionSize: parseFloat(document.getElementById("positionSize").value),
+      token:        githubToken    // carry forward your PAT
     };
 
-    // 2) Optionally save locally
-    localStorage.setItem("backtestParams", JSON.stringify(params));
-
-    // 3) Push config.json update to GitHub
-    //    You need to fill in USERNAME, REPO, and a PAT with repo:contents scope.
-    const owner = "YOUR_USERNAME";
-    const repo  = "YOUR_REPO";
+    // 3) GitHub repo info
+    const owner = "zacSpace";
+    const repo  = "visProjects";
     const path  = "config.json";
-    const token = "YOUR_PERSONAL_ACCESS_TOKEN";
 
-    // (a) First fetch the existing file to get its SHA
-    const getRes = await fetch(
+    // 4) Helper to call the GitHub API with your token
+    const gh = (url, opts={}) =>
+      fetch(url, {
+        ...opts,
+        headers: {
+          "Authorization": `token ${githubToken}`,
+          "Accept":        "application/vnd.github.v3+json",
+          ...(opts.headers || {})
+        }
+      });
+
+    // 5) Get existing file SHA (so we can update)
+    let sha;
+    const getRes = await gh(
       `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
-    , {
-      headers: {
-        Authorization: `token ${token}`
+    );
+    if (getRes.ok) {
+      const data = await getRes.json();
+      sha = data.sha;
+    }
+
+    // 6) PUT the new config.json
+    const putRes = await gh(
+      `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({
+          message: "Update backtest config",
+          content: btoa(JSON.stringify(params, null, 2)),
+          sha
+        })
       }
-    });
-    const { sha } = await getRes.json();
-
-    // (b) Then PUT the updated config.json
-    const putRes = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
-    , {
-      method: "PUT",
-      headers: {
-        Authorization: `token ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: "Update backtest config",
-        content: btoa(JSON.stringify(params, null, 2)),
-        sha
-      })
-    });
+    );
 
     if (!putRes.ok) {
       const err = await putRes.text();
-      console.error("GitHub update failed:", err);
-      return alert("Failed to save config. See console for details.");
+      console.error("GitHub write failed:", err);
+      alert("Failed to save config. See console for details.");
+      return;
     }
 
     alert("Parameters saved—please wait a minute and reload to see the results.");
