@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Polymarket Search & Backtest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../../css/styles.css" />
+  <style>
+    :root { --muted:#6b7280; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial; margin:0; }
+    header { padding:24px 20px; max-width:1000px; margin:0 auto; }
+    header a { text-decoration:none; color:#2563eb; }
+    main { max-width:1000px; margin:0 auto; padding:0 20px 40px; }
+    .row { display:grid; grid-template-columns: 1fr; gap:20px; }
+    @media (min-width: 900px) { .row { grid-template-columns: 1fr 1fr; } }
+    img { max-width:100%; border-radius:10px; border:1px solid #e5e7eb; }
+    .note { color: var(--muted); font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../../">← Back to Home</a>
+    <h1>Polymarket Search & Backtest</h1>
+    <p class="note">This page can host your form and charts. For now, it shows the latest generated images.</p>
+  </header>
+
+  <main>
+    <section class="row">
+      <div>
+        <h2>Trends vs. Market Price</h2>
+        <img src="../../images/chart.png" alt="Trends vs Market Price">
+      </div>
+      <div>
+        <h2>Portfolio Equity Curve</h2>
+        <img src="../../images/portfolio.png" alt="Portfolio Value Over Time">
+      </div>
+    </section>
+
+    <!-- Later, embed your parameter form here again (copied from your old index.html) -->
+  </main>
+</body>
+</html>

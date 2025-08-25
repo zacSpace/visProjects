@@ -1,51 +1,55 @@
-<!-- docs/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Static Site</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8" />
+  <title>Zac’s Projects</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    /* Minimal styles so this works even if styles.css is unchanged */
+    :root { --card-bg:#fff; --card-border:#e5e7eb; --text:#111827; --muted:#6b7280; --hover:#f9fafb; --accent:#2563eb; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji','Segoe UI Emoji'; color:var(--text); background:#f5f7fb; }
+    header { padding:28px 20px; max-width:1000px; margin:0 auto; }
+    header h1 { margin:0 0 6px 0; font-size:1.75rem; }
+    header p { margin:0; color:var(--muted); }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:16px; padding:20px; max-width:1000px; margin:0 auto 40px; }
+    .card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:12px; padding:18px; text-decoration:none; color:inherit; display:block; transition:transform .12s ease, background .12s ease; }
+    .card:hover { transform: translateY(-2px); background:var(--hover); }
+    .card h3 { margin:0 0 8px 0; font-size:1.1rem; }
+    .card p { margin:0; color:var(--muted); font-size:.95rem; }
+    footer { max-width:1000px; margin:20px auto 60px; color:var(--muted); padding:0 20px; font-size:.9rem; }
+  </style>
 </head>
 <body>
-  <h1>My Prediction-Market Backtest2</h1>
+  <header>
+    <h1>Zac’s Project Hub</h1>
+    <p>Click a project to open it.</p>
+  </header>
 
-  <!-- New: Backtest parameter form -->
-  <form id="backtest-form">
-    <div>
-      <label for="posSd">Positive SD threshold:</label>
-      <input type="number" id="posSd" step="0.1" value="1">
-    </div>
-    <div>
-      <label for="negSd">Negative SD threshold:</label>
-      <input type="number" id="negSd" step="0.1" value="1">
-    </div>
-    <div>
-      <label for="holdDays">Holding period (days):</label>
-      <input type="number" id="holdDays" min="1" value="3">
-    </div>
-    <div>
-      <label for="positionSize">Position size ($):</label>
-      <input type="number" id="positionSize" step="0.01" value="10">
-    </div>
-    <button type="submit">Run Backtest</button>
-  </form>
+  <main class="grid">
+    <!-- Polymarket Project -->
+    <a class="card" href="projects/polymarket/">
+      <h3>Polymarket Search & Backtest</h3>
+      <p>Trends vs. market data, parameterized backtests, and charts.</p>
+    </a>
 
-  <h1>ZooTopia Google Trends v. Polymarket Highest Grossing Movie 2025 Odds</h1>
+    <!-- Add more project tiles as you build them -->
+    <a class="card" href="#">
+      <h3>Project 2 (Coming Soon)</h3>
+      <p>Placeholder for your next idea.</p>
+    </a>
+    <a class="card" href="#">
+      <h3>Project 3 (Coming Soon)</h3>
+      <p>Another placeholder box.</p>
+    </a>
+  </main>
 
-  <!-- This is where your Python-generated chart appears -->
-  <img src="images/chart.png" alt="Category Values Chart">
+  <footer>
+    © <span id="year"></span> Zac
+  </footer>
 
-  <script src="js/config.js"></script>
-  <script src="js/app.js"></script>
-
-  <h2>Portfolio Value Over Time</h2>
-  <img
-    src="images/portfolio.png"
-    alt="Portfolio Value Over Time"
-    style="max-width:100%; display:block; margin:1em auto;"
-  >
-
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
-
-
